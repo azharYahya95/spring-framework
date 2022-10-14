@@ -1,72 +1,83 @@
-<h2>Spring Dependency Injection XML configuration</h2>
+## Spring Bean Scopes and Lifecycle
+1. **What is Bean Scopes?**
+- Refer to lifecycles of bean
+  - How long does bean live?
+  - How many instances are created
+  - How is the bean shared?
 
-1) <b>What is Dependency Injection?</b>
-   1. Outsource construction and Injection of your object to external entity
-   2. We inject Object that ready to use to our class/object
-   3. Spring Container will get/prepare object that ready to use for you<br><br>
-2) <b>Type of Injection</b>
-   1. There are many types of Injection, but in this project will cover 2 types of it
-      1. Constructor Injection
-      2. Setter Injection
-<br><br>
-3. <b>Process to do the Dependency Injection</b>
-   1. Define dependency Interface and class
-   2. Create Constructor in you class for Injection
-   3. Configure Dependency Injection in Spring config file
-        1. using (<constructor-arg ref="id_class_to_inject"/>)
-<br><br>
-4. <b>What happened behind the scene of Dependency Injection</b>
-   1. When create bean in conf file, behind the scene, Spring will create constructor for you
-      1. <p>In conf file</p> <pre><code>< bean id="myFortuneService"
-          class="org.example.HappyFortuneService"></bean></code></pre>
-                <p>Behind the Scene</p> 
-                <pre><code>
-            HappyFortuneService myFortuneService = new HappyFortuneService();
-         </code></pre>
-        
-        2. <p>In conf file</p> <pre><code>< bean id="myCoach"class="org.example.BaseballCoach">< constructor-arg ref="id_class_to_inject" /> </ bean> </code></pre>
-                <p>Behind the Scene</p> 
-                <pre><code>
-            BaseballCoach myCoach = new BaseballCoac(myFortuneService);
-      </code></pre>
-<br><br>
-5. <b>Step By Step to do the Setter Injection<b/><br>
-   1. Create Setter method in your class for Injections.
-        <pre><code>public class CricketCoach{
-            private FortuneService fortuneService;
-            
-            public void setFortuneService(){
-                this.fortuneService = fortuneService;
-            }
-      }</code></pre>
-   2. Configure the Dependency Injection in Spring Config file.
-      <pre><code> < bean id="myFortuneService" 
-                class="HappyFortuneService">< /bean>
+2. **What is a Singleton?**
+   - It is cached in memory
+   - by default, Spring container created 1 instances of the bean only
+   - all request of bean will shared reference to same bean
 
-      < bean id="myCricketCoach" class="CricketCoach">
-          < property name="fortuneService" ref="myFortuneService"/>
-      < /bean>
-      </code></pre></code></pre>
-<br>    
-6. <b>Behind The Scene of Setter Injection</b> </br>
-- in Config file
-    <pre>
-<code>< property name="fortuneService" ref="myFortuneService"/></code>
-    </pre>
-- behind the scene
-<pre><code>CricketCoach myCoach = new CricketCoach()
-myCoach.setFortuneService(service)</code></pre>
 
-<br>
-7. </b><b>Injecting literal values</b><br>
-<pre><code>< property name="team" value="Perak FC"/ ></code></pre>
+3. **Type of Spring bean scopes**
+   <table>
+    <tr>
+        <th>Scope</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>singleton</td>
+        <td>Create single shared instance of the bean. Default Scope</td>
+    </tr>
+    <tr>
+        <td>prototype</td>
+        <td>Creates a new bean instance for each container request.</td>
+    </tr>
+   </table>
+   
+4. **How to create scope?**
+   ``` 
+   < beans...>
+        < bean id="myCoach"
+                class="com.luv2code.springdemo.TracCoach"
+                scope="prototype">
+        < /bean>
+   < /bean>
+   ```
+5. **Bean Lifecycle**
+   1. Bean Process When Start 
+  ``Container Started `` -> ``Bean Instantiated`` -> ``Dependencies Injection`` -> ``Internal Spring Processing`` -> ``Your custom Method`` -> ``Bean Ready to use``
+   2. What you can do during Bean initialization
+   - calling custom business logic methods
+   - Setting up handles to resources (db, sockets, file etc)
+   - code example </br>
+   ```
+   <beans ...>
+     <bean id="myCoach"
+            class="com.luv2code.springdemo.TrackCoach"
+            init-method="doMyStartupStaff">
+      ...
+      </bean>
+   </beans>
+   ```
+   3. Bean Process When Stop
+   ``Container is shutdown`` -> ``Your custom Destroy Method`` -> ``Stop``
+   4. What you can do during bean destruction
+   - callinng custom business logic methods
+   - Clean up handles to resources (db, sockets, file etc)
+   - code example</br>
+   ```
+   <beans ...>
+     <bean id="myCoach"
+          class="com.luv2code.springdemo.TrackCoach"
+          init-method="doMyStartupStuff"
+          destroy-method="doMyCleanupStuff">
+            ...
+     </bean>
+   </beans>
+   ```
+   5. Development process for bean initialization and destruction
+   - Define your method for init and destroy
+   - Configure method name in Spring config file
+   6. About the init and destroy java method
+   - Access modifier
+     - can have any access modifier
+   - Return Type
+     - can have any return type, but void mostly used
+   - method name
+     - can use any method name
+   - arguments
+     - should be no-args, cannot accept any arguments
 
-8. <b>Step by Step Injecting values from Properties file</b><br>
-   1. Create Properties file
-   <br><p>name file: </p><i>sport.properties</i>
-       <pre><code>foo.team=FSM</code></pre>
-   2. Load Properties file in Spring config file
-   <pre><code>< context:property-placeholder location:"classpath:sport.properties"/ ></code></pre>
-   3. Reference values from Properties file
-    <pre><code>< property name="team" value="${foo.email}" / ></code></pre>
-  

@@ -5,26 +5,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:sport.properties"/>
     <!--create Bean to inject-->
     <bean id="myFortune"
           class="org.example.HappyFortuneService"></bean>
 
     <bean id="myCoach"
-          class="org.example.BaseballCoach">
+          class="org.example.BaseballCoach"
+            scope="prototype">
         <!--setup Constructor Injection-->
         <constructor-arg ref="myFortune"/>
-    </bean>
-
-    <bean id="CricketCoach"
-          class="org.example.CricketCoach">
-
-        <!--setup Setter Injection-->
-        <property name="fortuneService" ref="myFortune"/>
-
-        <!--inject literal values-->
-        <property name="emailAddress" value="${foo.email}"/>
-        <property name="team" value="${foo.team}"/>
     </bean>
 
 </beans>
