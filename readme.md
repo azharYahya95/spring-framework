@@ -1,4 +1,4 @@
-<h2>Spring IOC XML configuration</h2>
+## Spring IOC XML configuration
 
 1) Spring will give appropriate object/implementation based on configuration file/annonation
 <br><br>
