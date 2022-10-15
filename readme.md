@@ -80,4 +80,7 @@
      - can use any method name
    - arguments
      - should be no-args, cannot accept any arguments
+   7. Spring does not call the destroy method for **Prototype** beans
+      - Spring does not manage the complete lifecycle for prototype bean
+      - 
 
