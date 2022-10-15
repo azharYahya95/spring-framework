@@ -5,15 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!--create Bean to inject-->
-    <bean id="myFortune"
-          class="org.example.HappyFortuneService"></bean>
-
-    <bean id="myCoach"
-          class="org.example.BaseballCoach"
-            scope="prototype">
-        <!--setup Constructor Injection-->
-        <constructor-arg ref="myFortune"/>
-    </bean>
+<context:component-scan base-package="com.luv2code.springdemo"/>
 
 </beans>

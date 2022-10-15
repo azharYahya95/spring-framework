@@ -1,86 +1,42 @@
-## Spring Bean Scopes and Lifecycle
-1. **What is Bean Scopes?**
-- Refer to lifecycles of bean
-  - How long does bean live?
-  - How many instances are created
-  - How is the bean shared?
+## Spring Configuration with Annotation - Inversion of control
 
-2. **What is a Singleton?**
-   - It is cached in memory
-   - by default, Spring container created 1 instances of the bean only
-   - all request of bean will shared reference to same bean
+1. ### What are java annotations
+   1. Special labels added to java classes
+   2. provide meta-data about class
+   3. Process at compile-time/run-time for special processing
 
 
-3. **Type of Spring bean scopes**
-   <table>
-    <tr>
-        <th>Scope</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>singleton</td>
-        <td>Create single shared instance of the bean. Default Scope</td>
-    </tr>
-    <tr>
-        <td>prototype</td>
-        <td>Creates a new bean instance for each container request.</td>
-    </tr>
-   </table>
-   
-4. **How to create scope?**
-   ``` 
-   < beans...>
-        < bean id="myCoach"
-                class="com.luv2code.springdemo.TracCoach"
-                scope="prototype">
-        < /bean>
-   < /bean>
+2. ### Why using Spring Configuration with annotations
+   1. XML configurations can be verbose
+   2. Annotations minimize the XML configuration
+
+
+3. ### How beans is register to Spring Container using Java annotations?
+   1. Spring will scan your Java class first for special annotations
+   2. Then its automatically register beans in the Spring Container
+
+4. ### Development Process to create beans using Java Annotations
+   1. Enable component scanning in Spring config file.
    ```
-5. **Bean Lifecycle**
-   1. Bean Process When Start 
-  ``Container Started `` -> ``Bean Instantiated`` -> ``Dependencies Injection`` -> ``Internal Spring Processing`` -> ``Your custom Method`` -> ``Bean Ready to use``
-   2. What you can do during Bean initialization
-   - calling custom business logic methods
-   - Setting up handles to resources (db, sockets, file etc)
-   - code example </br>
-   ```
-   <beans ...>
-     <bean id="myCoach"
-            class="com.luv2code.springdemo.TrackCoach"
-            init-method="doMyStartupStaff">
-      ...
-      </bean>
+   <beans ..>
+        <context:component-scan base-package="com.luv2code.springdemo" />
    </beans>
    ```
-   3. Bean Process When Stop
-   ``Container is shutdown`` -> ``Your custom Destroy Method`` -> ``Stop``
-   4. What you can do during bean destruction
-   - callinng custom business logic methods
-   - Clean up handles to resources (db, sockets, file etc)
-   - code example</br>
+   2. Add @Component Annotation to your Java classes
    ```
-   <beans ...>
-     <bean id="myCoach"
-          class="com.luv2code.springdemo.TrackCoach"
-          init-method="doMyStartupStuff"
-          destroy-method="doMyCleanupStuff">
-            ...
-     </bean>
-   </beans>
+   @Component("thatSillyCoach")
+   public class TennisCoach implements Coach{
+        @Override
+        public String getDailyWorkout() {
+            return "Practice your backhand volley";
+        }
+   }
    ```
-   5. Development process for bean initialization and destruction
-   - Define your method for init and destroy
-   - Configure method name in Spring config file
-   6. About the init and destroy java method
-   - Access modifier
-     - can have any access modifier
-   - Return Type
-     - can have any return type, but void mostly used
-   - method name
-     - can use any method name
-   - arguments
-     - should be no-args, cannot accept any arguments
-   7. Spring does not call the destroy method for **Prototype** beans
-      - Spring does not manage the complete lifecycle for prototype bean
-      - 
+   3. Retrieve bean from Spring Container
+   ```
+   Coach theCoach = context.getBean("thatSillyCoach", Coach.class);
+   ```
 
+5. ### Default Component names
+   - Default bean Id: the class name, make first letter lower case
+   ``TennisCoach`` -> ``tennisCoach``
