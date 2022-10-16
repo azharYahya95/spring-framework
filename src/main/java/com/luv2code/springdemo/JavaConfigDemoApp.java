@@ -1,12 +1,13 @@
 package com.luv2code.springdemo;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ApplicationBeanScopeDemoApp {
+public class JavaConfigDemoApp {
     public static void main(String[] args) {
         //load Spring config file
-        ClassPathXmlApplicationContext context
-                = new ClassPathXmlApplicationContext("applicationContext.xml");
+        AnnotationConfigApplicationContext context
+                = new AnnotationConfigApplicationContext(SportConfig.class);
         //retrieve bean from  Spring COntainer
         Coach theCoach = context.getBean("thatSillyCoach", Coach.class);
         Coach alphaCoach = context.getBean("thatSillyCoach", Coach.class);
@@ -17,11 +18,8 @@ public class ApplicationBeanScopeDemoApp {
         //print out the resuults
         System.out.println("Pointing to the same object: "+ result);
 
-        System.out.println("Memory Location for theCoach: "+ theCoach);
-
-        System.out.println("Memory Location for alphaCoach: "+ alphaCoach);
-
         //close the context
         context.close();
     }
 }
+//need to modify on SportConfig class to run this
