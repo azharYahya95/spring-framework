@@ -1,24 +1,52 @@
-## Spring IOC XML configuration
+## Spring MVC
 
-1) Spring will give appropriate object/implementation based on configuration file/annonation
-<br><br>
-2) <b>What  is primary function of Spring Container </b><br>
-    a) Create and manage object (Inversion of Controls) <br>
-    b) Inject Object Dependencies (Dependency Injection)<br><br>
-3) <b>Approach to configure Spring Container</b><br>
-    - XML configuration file (legacy)
-    - Java Annontations (modern)
-    - Java Source Code (modern)<br><br>
-4) <b>Step by Step to create Beans from Spring Container </b>
-    - Configure Spring Beans
-      - <i>can check in applicationContext.xml</i>
-    - Create Spring Container
-      - known as ApplicationContext
-      - got specialize implementations
-        - ClassPathXMLApplicationContext
-        - AnnotationConfigApplicationContext
-        - GenericWebApplicationContext
-        - others ...
-    - Retrieve Beans from Spring Container<br><br>
-5) Spring beans is Java Object that created by Spring Container
-  
+1. Developing Spring Controller and View
+   1. ### Development process to create Spring Controller and View
+      1. Create Controller Class
+        - Annotate class from @Controller
+        - @Controller inherits from @Component, then it supports scanning
+         ```java
+            @Controller
+            public class HomeController{
+            }  
+         ```
+      2. Define Controller Method
+         ```java
+         @Controller
+         public class HomeController{
+            private String showMyPage(){
+                //...
+            }
+         }
+         ```
+      3. Add Request Mapping to Controller Method
+         ```java
+         @Controller
+         public class HomeController{
+            @RequestMapping("/")
+            private String showMyPage(){
+                //...
+            }
+         }
+         ```
+      4. Return View Name
+         ```java
+         @Controller
+         public class HomeController{
+            @RequestMapping("/")
+             private String showMyPage(){
+                return "main-menu";
+            }
+         }
+         ```
+         - the full name of view page will become like this ``/WEB-INF/view/main-menu.jsp``
+      5. Develop View Page
+         File:_/WEB-INF/view/main-menu.jsp_
+         ```html
+            <html>
+                <body>
+                    <h2>Spring MVC DEMO - Home Page</h2>
+                </body>
+            </html>
+         ```
+    2. 
